@@ -1,6 +1,11 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
+struct Vec2
+	{
+		int x, y;
+	};
+
 class Player : public Module
 {
 public:
@@ -20,6 +25,20 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
+
+	// Position of the player in the map
+	Vec2 position;
+
+
+	//bool isMoving;	
+	int direction;
+	
+
+	SDL_Rect playerRect;
+
+	// The player spritesheet loaded into an SDL_Texture
+	SDL_Texture* playerSprites = nullptr;
+
 
 
 
