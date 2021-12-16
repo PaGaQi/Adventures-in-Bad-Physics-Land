@@ -2,7 +2,9 @@
 #include "Player.h"
 #include "Physics.h"
 #include "Render.h"
+#include "Scene.h"
 #include "Module.h"
+#include "Input.h"
 #include "SDL/include/SDL.h"
 
 Player::Player()
@@ -25,7 +27,9 @@ bool Player::Awake(pugi::xml_node&)
 // Called before the first frame
 bool Player::Start()
 {
-	playerRect = { 0, 0, 32, 32 };
+	gravity = 1;
+	position = { 0, 0 };
+	playerRect = { position.x, position.y, 32, 32 };
 
 	return true;
 }
@@ -33,18 +37,34 @@ bool Player::Start()
 // Called each loop iteration
 bool Player::PreUpdate()
 {
+	if (position.y < SCREEN_HEIGHT - playerRect.h - 200) position.y = position.y + gravity;
+	
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		position.x++;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		position.x--;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		position.y -= 2;
+	}
 
 	return true;
 }
 
 bool Player::Update(float dt)
 {
-	app->render->DrawRectangle(playerRect, 255, 0, 0, 255);
+	playerRect.x = position.x;
+	playerRect.y = position.y;
 	return true;
 }
 
 bool Player::PostUpdate()
 {
+	app->render->DrawRectangle(playerRect, 255, 0, 0, 255);
 	return true;
 }
 

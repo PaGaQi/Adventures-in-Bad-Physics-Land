@@ -39,8 +39,8 @@ public:
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprites = nullptr;
 
-
-
+	//Forces
+	int gravity;
 
 	// Called before quitting
 	bool CleanUp();
