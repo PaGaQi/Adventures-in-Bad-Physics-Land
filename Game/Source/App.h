@@ -15,6 +15,7 @@ class Audio;
 class Scene;
 class Physics;
 class Player;
+class Shoot;
 class Time;
 
 class App
@@ -79,6 +80,7 @@ public:
 	Scene* scene;
 	Physics* physics;
 	Player* player;
+	Shoot* shoot;
 	Time* time;
 
 private:

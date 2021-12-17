@@ -40,6 +40,9 @@
     <ClCompile Include="Source\Time.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Shoot.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -100,6 +103,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Source\Time.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shoot.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

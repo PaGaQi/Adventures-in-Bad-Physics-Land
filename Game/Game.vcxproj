@@ -103,6 +103,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
+    <ClCompile Include="Source\Shoot.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Time.cpp" />
     <ClCompile Include="Source\Window.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
+    <ClInclude Include="Source\Shoot.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Time.h" />
     <ClInclude Include="Source\Window.h" />

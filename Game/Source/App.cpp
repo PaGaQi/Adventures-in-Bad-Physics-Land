@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Shoot.h"
 #include "Time.h"
 
 #include "Defs.h"
@@ -28,6 +29,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new Scene();
 	physics = new Physics();
 	player = new Player();
+	shoot = new Shoot();
 	time = new Time();
 
 	// Ordered for awake / Start / Update
@@ -39,6 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(physics);
 	AddModule(player);
+	AddModule(shoot);
 	AddModule(time);
 
 	// Render last to swap buffer
