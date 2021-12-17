@@ -43,6 +43,9 @@
     <ClCompile Include="Source\Shoot.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Collider.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -55,9 +58,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\SString.h">
@@ -106,6 +106,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Source\Shoot.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Point.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
