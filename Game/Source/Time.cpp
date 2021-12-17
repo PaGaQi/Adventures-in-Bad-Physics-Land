@@ -3,6 +3,9 @@
 #include "Module.h"
 #include "Log.h"
 #include "Time.h"
+#include "SDL/include/SDL.h"
+
+Time* Time:: sInstance = nullptr;
 
 Time::Time()
 {	
@@ -17,18 +20,13 @@ bool Time:: Start()
 	return true;
 }
 
-// Called each loop iteration
-bool Time::PreUpdate()
+void Time::Ticks()
 {
-	return true;
-}
-bool Time::Update(float dt)
-{
-	return true;
-}
-bool Time::PostUpdate()
-{
-	return true;
+	deltaTime = (SDL_GetTicks() - lastTime) * (FPS / 1000.0f);
+
+	if (deltaTime > TARGET_DELTA_TIME) deltaTime = TARGET_DELTA_TIME;
+
+	lastTime = SDL_GetTicks();
 }
 
 // Called before quitting

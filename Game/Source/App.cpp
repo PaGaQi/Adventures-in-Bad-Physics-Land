@@ -192,6 +192,7 @@ bool App::PreUpdate()
 // Call modules on each loop iteration
 bool App::DoUpdate()
 {
+	dt = app->time->GetInstance()->GetDeltaTime();
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;

@@ -67,6 +67,7 @@ inline const char* const PATH(const char* folder, const char* file)
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
+#define FPS 60
 
 //Vec2
 struct Vec2
