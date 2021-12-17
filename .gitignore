@@ -41,10 +41,10 @@ Thumbs.db
 *.obj
 *.pdb
 *.aps
-# *.user
-# *.vcproj
-# *.vcxproj*
-# *.sln
+*.user
+*.vcproj
+*.vcxproj*
+*.sln
 *.vspscc
 *_i.c
 *.i

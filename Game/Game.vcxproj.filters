@@ -37,6 +37,9 @@
     <ClCompile Include="Source\Player.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Time.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -94,6 +97,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Time.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

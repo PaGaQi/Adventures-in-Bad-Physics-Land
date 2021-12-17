@@ -33,7 +33,11 @@ bool Scene::Start()
 {
 	battlefieldWidth = 1280;
 	battlefieldHeight = SCREEN_HEIGHT / 2;
-	battlefield = { (SCREEN_WIDTH - battlefieldWidth) / 2 , SCREEN_HEIGHT - 200, battlefieldWidth, battlefieldHeight };
+	
+	battlefieldPos.x = (SCREEN_WIDTH - battlefieldWidth) / 2;
+	battlefieldPos.y = SCREEN_HEIGHT - 200;
+	
+	battlefield = { (int)battlefieldPos.x , (int)battlefieldPos.y, battlefieldWidth, battlefieldHeight };
 	return true;
 }
 

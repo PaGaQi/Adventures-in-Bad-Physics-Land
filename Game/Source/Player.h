@@ -1,10 +1,6 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
-
-struct Vec2
-	{
-		int x, y;
-	};
+#include "Defs.h"
 
 class Player : public Module
 {
@@ -26,9 +22,14 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
-	// Position of the player in the map
-	Vec2 position;
+	//Physic Functions
+	void VelFromAcc(Vec2* acc, Vec2* vel);
+	void PosFromVel(Vec2* vel, Vec2* pos);
 
+	// Position of the player in the map
+	Vec2 playerPos;
+	Vec2 playerVel;
+	Vec2 playerAcc;
 
 	//bool isMoving;	
 	int direction;
@@ -41,6 +42,7 @@ public:
 
 	//Forces
 	int gravity;
+	float drag;
 
 	// Called before quitting
 	bool CleanUp();

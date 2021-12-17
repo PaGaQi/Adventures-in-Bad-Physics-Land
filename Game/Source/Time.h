@@ -1,31 +1,24 @@
+#pragma once
 #include "Module.h"
 #include "SDL/include/SDL.h"
+#include "Defs.h"
 
-class Physics : public Module
+class Time : public Module
 {
 public:
 
-	Physics();
+	Time();
 
 	// Destructor
-	virtual ~Physics();
+	virtual ~Time();
 
 	// Called before render is available
-	bool Awake(pugi::xml_node&);
-
-	// Called before the first frame
 	bool Start();
 
 	// Called each loop iteration
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
-
-	//Forces
-	int Gravity();
-	int Restitution();
-
-
 
 	// Called before quitting
 	bool CleanUp();

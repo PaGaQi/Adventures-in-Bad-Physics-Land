@@ -15,6 +15,7 @@ class Audio;
 class Scene;
 class Physics;
 class Player;
+class Time;
 
 class App
 {
@@ -78,6 +79,7 @@ public:
 	Scene* scene;
 	Physics* physics;
 	Player* player;
+	Time* time;
 
 private:
 

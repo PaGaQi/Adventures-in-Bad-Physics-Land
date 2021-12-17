@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Render.h"
 #include "Textures.h"
+#include "Defs.h"
 
 struct SDL_Texture;
 
@@ -35,8 +36,12 @@ public:
 	bool CleanUp();
 
 	SDL_Rect battlefield;
+	
 	int battlefieldWidth;
 	int battlefieldHeight;
+
+	Vec2 battlefieldPos;
+
 
 private:
 	SDL_Texture* img;
