@@ -22,6 +22,9 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 
+	// Called before quitting
+	bool CleanUp();
+
 	//Physic Functions
 	void VelFromAcc(Vec2* acc, Vec2* vel);
 	void PosFromVel(Vec2* vel, Vec2* pos);
@@ -31,11 +34,12 @@ public:
 	Vec2 playerVel;
 	Vec2 playerAcc;
 
-	//bool isMoving;	
-	int direction;
-	
+	//Direction, 1 right, 0 left;	
+	bool direction;
+	int mass;
 
 	SDL_Rect playerRect;
+	
 
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprites = nullptr;
@@ -43,7 +47,5 @@ public:
 	//Forces
 	int gravity;
 	float drag;
-
-	// Called before quitting
-	bool CleanUp();
+	
 };

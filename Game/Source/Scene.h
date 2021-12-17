@@ -36,11 +36,17 @@ public:
 	bool CleanUp();
 
 	SDL_Rect battlefield;
+	Vec2 battlefieldPos;
 	
 	int battlefieldWidth;
 	int battlefieldHeight;
 
-	Vec2 battlefieldPos;
+
+	SDL_Rect wall;
+	Vec2 wallPos;
+
+	int wallWidth;
+	int wallHeight;
 
 
 private:

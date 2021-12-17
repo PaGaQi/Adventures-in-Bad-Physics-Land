@@ -30,9 +30,12 @@ bool Player::Start()
 {
 	gravity = 1;
 	drag = 0.0f;
+	mass = 3;
+
 	playerPos = { 0, 0 };
 	playerVel = { 0, 0 };
 	playerAcc = { 0, 0 };
+
 	playerRect = { (int)playerPos.x, (int)playerPos.y, 32, 32 };
 
 	return true;
@@ -45,11 +48,15 @@ bool Player::PreUpdate()
 	
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		playerAcc.x = 1;	
+		playerAcc.x = 0.25f;
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		playerAcc.x = -1;
+		playerAcc.x = -0.25f;
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		playerAcc.x = 1;
 	}
 	else playerAcc.x = 0;
 	
@@ -58,10 +65,12 @@ bool Player::PreUpdate()
 		playerVel.y = -2;
 	}
 	else playerVel.y = 0;
+		
+	
 
-
-	drag = 0.9 * (playerVel.x);
-
+	drag = 0.5 * (playerVel.x);
+	
+	
 	return true;
 }
 
@@ -74,6 +83,9 @@ bool Player::Update(float dt)
 	playerRect.x = (int)playerPos.x;
 	playerRect.y = (int)playerPos.y;
 
+	if (playerVel.x != 0) LOG("VEL = %f", playerVel.x);
+	//if (drag != 0.0f) LOG("DRAG = %f", drag);
+
 	if (playerPos.x < 0 && playerPos.x > 1200) playerPos.x = 32;
 
 	return true;
@@ -84,8 +96,8 @@ bool Player::PostUpdate()
 	app->render->DrawRectangle(playerRect, 255, 0, 0, 255);
 
 	//LOG("Player Pos = %i", position.x);
-	LOG("Player Vel = %f", playerVel.x);
-	LOG("DRAG = %f", drag);
+	//if (playerVel.x != 0)LOG("Player Vel = %f", playerVel.x);
+	//if (drag != 0) LOG("DRAG = %f", drag);
 	//LOG("Player Acc = %i", acceleration.x);
 	return true;
 }

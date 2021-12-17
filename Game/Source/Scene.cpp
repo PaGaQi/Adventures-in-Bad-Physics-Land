@@ -13,6 +13,7 @@ Scene::Scene() : Module()
 {
 	name.Create("scene");
 	battlefield;
+	wall;
 }
 
 // Destructor
@@ -38,6 +39,14 @@ bool Scene::Start()
 	battlefieldPos.y = SCREEN_HEIGHT - 200;
 	
 	battlefield = { (int)battlefieldPos.x , (int)battlefieldPos.y, battlefieldWidth, battlefieldHeight };
+
+	wallWidth = 50;
+	wallHeight = SCREEN_HEIGHT / 2;
+
+	wallPos.x = SCREEN_WIDTH - wallWidth;
+	wallPos.y = 160;
+
+	wall = { (int)wallPos.x , (int)wallPos.y, wallWidth, wallHeight };
 	return true;
 }
 
@@ -63,6 +72,7 @@ bool Scene::Update(float dt)
 		app->render->camera.x += 1;
 
 	app->render->DrawRectangle(battlefield, 255, 255, 0, 255);
+	//app->render->DrawRectangle(wall, 0, 0, 255, 255);
 	return true;
 }
 
