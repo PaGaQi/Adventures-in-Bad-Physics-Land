@@ -26,8 +26,9 @@ public:
 	bool CleanUp();
 
 	//Physic Functions
-	void VelFromAcc(Vec2* acc, Vec2* vel);
-	void PosFromVel(Vec2* vel, Vec2* pos);
+	void AccFromForce();
+	void VelFromAcc();
+	void PosFromVel();
 
 	// Position of the player in the map
 	Vec2 playerPos;
@@ -40,12 +41,13 @@ public:
 
 	SDL_Rect playerRect;
 	
-
+	
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Texture* playerSprites = nullptr;
 
 	//Forces
-	int gravity;
-	float drag;
+	float gravity;
+	float playerFriction;
+	Vec2 playerImpulse;
 	
 };

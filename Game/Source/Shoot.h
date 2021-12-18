@@ -16,7 +16,6 @@ enum type
 class Shoot : public Module
 {
 public:
-
 	Shoot();
 
 	// Destructor
@@ -27,13 +26,12 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
-
+	
 	// Called before all Updates
 	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();
-
 
 	void VelFromAcc(Vec2* acc, Vec2* vel);
 	void PosFromVel(Vec2* vel, Vec2* pos);

@@ -31,9 +31,9 @@ bool Player::Awake(pugi::xml_node&)
 // Called before the first frame
 bool Player::Start()
 {
-	gravity = 2;
-	drag = 0.0f;
-	mass = 3;
+	gravity = 3;
+	playerFriction = 0.0f;
+	mass = 1;
 
 	playerPos = { 0, 0 };
 	playerVel = { 0, 0 };
@@ -54,40 +54,42 @@ bool Player::PreUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		playerAcc.x = 1;
+		playerImpulse.x = 0.5f;
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		playerAcc.x = -1;
+		playerImpulse.x = -0.5f;
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
-		playerAcc.x = 20;
+		playerImpulse.x = 5;
 	}
-	else playerAcc.x = 0;
+	else playerImpulse.x = 0;
 	
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
 	{
-		playerVel.y = -2;
+		playerImpulse.y = -3;
 	}
-	else playerVel.y = 0;
+	else playerImpulse.y = 0;
 		
 
-	drag = 0.5 * (playerVel.x);	
+	playerFriction = 0.5 * (playerVel.x);	
 	
 	return true;
 }
 
 bool Player::Update(float dt)
 {
-	VelFromAcc(&playerAcc, &playerVel);
+	AccFromForce();
 
-	PosFromVel(&playerVel, &playerPos);
+	VelFromAcc();
+
+	PosFromVel();
 
 	playerRect.x = (int)playerPos.x;
 	playerRect.y = (int)playerPos.y;
 
-	if (playerVel.y != 0) LOG("VEL = %f", playerVel.y);
+	if (playerVel.x != 0) LOG("VEL = %f", playerVel.x);
 	//if (drag != 0.0f) LOG("DRAG = %f", drag);
 
 	if (playerPos.x < 0 && playerPos.x > 1200) playerPos.x = 32;
@@ -106,18 +108,25 @@ bool Player::PostUpdate()
 	return true;
 }
 
-void Player::VelFromAcc(Vec2* acc, Vec2* vel)
+void Player::AccFromForce()
+{
+	playerAcc.x = playerImpulse.x / mass; //a = F / m
+	playerAcc.y = (playerImpulse.y / mass); //a = F / m
+}
+
+void Player::VelFromAcc()
 {	
-	playerVel.x += playerAcc.x - drag;
+	playerVel.x += playerAcc.x - playerFriction;
 	playerVel.y += playerAcc.y - 0.5 * (playerVel.y);
 }												
 												
-void Player::PosFromVel(Vec2* vel, Vec2* pos)	
+void Player::PosFromVel()	
 {
 	//playerPos.x += playerVel.x;
 	playerPos.x += (playerVel.x * app->dt) + (0.5f * playerAcc.x * sqrt(app->dt) );
 	//playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y + gravity) * sqrt(app->dt));
 
+	//Apply gravity only when the player isn't on the ground
 	if (playerPos.y < app->scene->battlefieldPos.y - playerRect.h) playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y + gravity) * sqrt(app->dt));
 	else if (playerPos.y >= app->scene->battlefieldPos.y - playerRect.h) playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
 
