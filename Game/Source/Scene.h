@@ -11,7 +11,6 @@ struct SDL_Texture;
 class Scene : public Module
 {
 public:
-
 	Scene();
 
 	// Destructor
@@ -42,8 +41,11 @@ public:
 	int battlefieldHeight;
 
 
-	SDL_Rect wall;
-	Vec2 wallPos;
+	SDL_Rect wallRight;
+	Vec2 wallRightPos;
+
+	SDL_Rect wallLeft;
+	Vec2 wallLeftPos;
 
 	int wallWidth;
 	int wallHeight;

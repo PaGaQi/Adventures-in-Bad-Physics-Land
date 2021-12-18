@@ -17,6 +17,8 @@ public:
 	// Called before the first frame
 	bool Start();
 
+	void Restart();
+
 	// Called each loop iteration
 	bool PreUpdate();
 	bool Update(float dt);
@@ -43,11 +45,17 @@ public:
 	
 	
 	// The player spritesheet loaded into an SDL_Texture
-	SDL_Texture* playerSprites = nullptr;
+	SDL_Rect winScreenRect;
+	SDL_Texture* playerWinScreen;
+
+	//TEMPORARY WHILE WE DON'T HAVE ENEMY MODULE
+	SDL_Texture* enemyWinScreen;
 
 	//Forces
 	float gravity;
 	float playerFriction;
 	Vec2 playerImpulse;
 	
+	bool gameEnd;
+	bool playerLose;
 };

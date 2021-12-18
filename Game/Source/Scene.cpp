@@ -13,7 +13,8 @@ Scene::Scene() : Module()
 {
 	name.Create("scene");
 	battlefield;
-	wall;
+	wallRight;
+	wallLeft;
 }
 
 // Destructor
@@ -32,7 +33,7 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-	battlefieldWidth = 1280;
+	battlefieldWidth = 1000;
 	battlefieldHeight = SCREEN_HEIGHT / 2;
 	
 	battlefieldPos.x = (SCREEN_WIDTH - battlefieldWidth) / 2;
@@ -41,12 +42,16 @@ bool Scene::Start()
 	battlefield = { (int)battlefieldPos.x , (int)battlefieldPos.y, battlefieldWidth, battlefieldHeight };
 
 	wallWidth = 50;
-	wallHeight = SCREEN_HEIGHT / 2;
+	wallHeight = SCREEN_HEIGHT - 160;
 
-	wallPos.x = SCREEN_WIDTH - wallWidth;
-	wallPos.y = 160;
+	wallRightPos.x = SCREEN_WIDTH - wallWidth;
+	wallRightPos.y = 160;
 
-	wall = { (int)wallPos.x , (int)wallPos.y, wallWidth, wallHeight };
+	wallLeftPos.x = 0;
+	wallLeftPos.y = 160;
+
+	wallRight = { (int)wallRightPos.x , (int)wallRightPos.y, wallWidth, wallHeight };
+	wallLeft = { (int)wallLeftPos.x , (int)wallLeftPos.y, wallWidth, wallHeight };
 	return true;
 }
 
@@ -72,7 +77,8 @@ bool Scene::Update(float dt)
 		app->render->camera.x += 1;
 
 	app->render->DrawRectangle(battlefield, 255, 255, 0, 255);
-	//app->render->DrawRectangle(wall, 0, 0, 255, 255);
+	app->render->DrawRectangle(wallRight, 0, 0, 255, 255);
+	app->render->DrawRectangle(wallLeft, 0, 0, 255, 255);
 	return true;
 }
 
