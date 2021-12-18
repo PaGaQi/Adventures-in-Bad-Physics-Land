@@ -35,6 +35,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(win);
+	AddModule(time);
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
@@ -42,7 +43,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(physics);
 	AddModule(player);
 	AddModule(shoot);
-	AddModule(time);
 
 	// Render last to swap buffer
 	AddModule(render);

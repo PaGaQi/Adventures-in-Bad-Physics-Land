@@ -8,6 +8,8 @@ Time* Time:: sInstance = nullptr;
 
 Time::Time()
 {	
+	deltaTime = 0;
+	lastTime = 0;
 }
 
 // Destructor

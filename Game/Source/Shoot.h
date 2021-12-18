@@ -1,9 +1,17 @@
 #include "Module.h"
 #include "Render.h"
 #include "Textures.h"
+#include "math.h"
 #include "Defs.h"
 
 struct SDL_Texture;
+
+enum type
+	{
+		STICKY, 
+		BOUNCY,	
+		NOTHING
+	};
 
 class Shoot : public Module
 {
@@ -13,10 +21,7 @@ public:
 
 	// Destructor
 	virtual ~Shoot();
-
-	// Called before the first frame
-	bool Start();
-
+	
 	// Called before all Updates
 	bool PreUpdate();
 
@@ -33,10 +38,17 @@ public:
 	void VelFromAcc(Vec2* acc, Vec2* vel);
 	void PosFromVel(Vec2* vel, Vec2* pos);
 
-	// Position of the player in the map
+	//Create a shot
+	void Fire(Vec2 pos);
+	void Reload();
+
+	// Position of the shot in the map
 	Vec2 shotPos;
 	Vec2 shotVel;
 	Vec2 shotAcc;
+
+	//Type of Shot you fire
+	type shotType;
 
 	//Direction, 1 right, 0 left;	
 	bool direction;
@@ -48,5 +60,8 @@ public:
 	float gravity;
 	float friction;
 private:
+
+	const int offScreenBuffer = 10;
+
 
 };

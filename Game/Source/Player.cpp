@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "Module.h"
 #include "Input.h"
+#include "Time.h"
+#include "Shoot.h"
 #include "SDL/include/SDL.h"
 #include "Log.h"
 
