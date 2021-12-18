@@ -35,6 +35,8 @@ public:
 	void VelFromAcc();
 	void PosFromVel();
 
+	void ImpulseToMouse(int lastMouseX, int lastMouseY);
+
 	void OnCollision(Collider* c1, Collider* c2) override;
 
 	// Position of the player in the map
@@ -60,6 +62,11 @@ public:
 	float gravity;
 	float playerFriction;
 	Vec2 playerImpulse;
+
+	SDL_Rect mouseRect;
+
+	Vec2 player2Mouse;
+	float player2MouseModule;
 	
 	bool gameEnd;
 	bool playerLose;

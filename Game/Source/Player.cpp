@@ -47,6 +47,8 @@ bool Player::Start()
 	playerVel = { 0, 0 };
 	playerAcc = { 0, 0 };
 
+	mouseRect = { 0, 0, 16, 16 };
+
 	playerWinScreen = app->tex->Load("Assets/Textures/RedGuyWins.png");
 	enemyWinScreen = app->tex->Load("Assets/Textures/BlueGuyWins.png");
 
@@ -87,6 +89,11 @@ bool Player::PreUpdate()
 		else playerImpulse.y = 0;
 	}
 
+	SDL_GetMouseState(&mouseRect.x, &mouseRect.y);
+
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) ImpulseToMouse(mouseRect.x, mouseRect.y);
+
+
 	playerFriction = 0.5 * (playerVel.x);	
 	
 	return true;
@@ -108,8 +115,7 @@ bool Player::Update(float dt)
 	playerRect.x = (int)playerPos.x;
 	playerRect.y = (int)playerPos.y;
 
-	if (playerVel.x != 0) LOG("VEL = %f", playerVel.x);
-	//if (drag != 0.0f) LOG("DRAG = %f", drag);
+	if (playerVel.x != 0) LOG("VEL = %f", playerVel.x);	
 
 	if (playerPos.x < 0 && playerPos.x > 1200) playerPos.x = 32;
 
@@ -139,6 +145,19 @@ bool Player::PostUpdate()
 	//if (drag != 0) LOG("DRAG = %f", drag);
 	//LOG("Player Acc = %i", acceleration.x);
 	return true;
+}
+
+void Player::ImpulseToMouse(int lastMouseX, int lastMouseY)
+{
+	player2Mouse.x = mouseRect.x - playerPos.x;
+	player2Mouse.y = mouseRect.y - playerPos.y;
+
+	player2MouseModule = sqrt(pow(player2Mouse.x, 2) + pow(player2Mouse.y, 2));
+
+	playerImpulse.x = 4 * (player2Mouse.x / player2MouseModule);
+	playerImpulse.y = 4 * (player2Mouse.y / player2MouseModule);
+
+	LOG("X: %f / Y: %f / M: %f", player2Mouse.x, player2Mouse.y, player2MouseModule);
 }
 
 void Player::AccFromForce()
