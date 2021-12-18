@@ -85,6 +85,8 @@ public:
 	Shoot* shoot;
 	Timer* timer;
 
+
+	float dt = 0.0f;
 private:
 
 	int argc;
@@ -113,7 +115,7 @@ private:
 	uint32 lastSecFrameCount = 0;
 
 	float averageFps = 0.0f;
-	float dt = 0.0f;
+
 
 	uint32 maxFrameRate = (1000 / FPS);
 };

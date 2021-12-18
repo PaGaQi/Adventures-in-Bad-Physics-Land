@@ -3,6 +3,7 @@
 // ----------------------------------------------------
 
 #include "PerfTimer.h"
+#include "Log.h"
 #include "SDL\include\SDL_timer.h"
 
 uint64 PerfTimer::frequency = 0;
