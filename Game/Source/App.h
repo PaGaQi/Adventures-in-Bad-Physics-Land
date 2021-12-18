@@ -3,6 +3,8 @@
 
 #include "Module.h"
 #include "List.h"
+#include "PerfTimer.h"
+#include "Timer.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -16,7 +18,7 @@ class Scene;
 class Physics;
 class Player;
 class Shoot;
-class Time;
+class Timer;
 
 class App
 {
@@ -81,7 +83,7 @@ public:
 	Physics* physics;
 	Player* player;
 	Shoot* shoot;
-	Time* time;
+	Timer* timer;
 
 private:
 
@@ -99,8 +101,21 @@ private:
 	pugi::xml_node config;
 	pugi::xml_node configApp;
 
-	uint frames;
-	float dt;
+	PerfTimer* ptimer;
+	PerfTimer* frameDuration;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	float averageFps = 0.0f;
+	float dt = 0.0f;
+
+	uint32 maxFrameRate = (1000 / FPS);
 };
 
 extern App* app;

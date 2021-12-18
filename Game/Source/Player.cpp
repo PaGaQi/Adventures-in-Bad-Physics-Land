@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "Module.h"
 #include "Input.h"
-#include "Time.h"
+#include "Timer.h"
 #include "Shoot.h"
 #include "SDL/include/SDL.h"
 #include "Log.h"
@@ -30,7 +30,7 @@ bool Player::Awake(pugi::xml_node&)
 // Called before the first frame
 bool Player::Start()
 {
-	gravity = 1;
+	gravity = 20;
 	drag = 0.0f;
 	mass = 3;
 
@@ -47,24 +47,25 @@ bool Player::Start()
 bool Player::PreUpdate()
 {
 	if (playerPos.y < app->scene->battlefieldPos.y - playerRect.h) playerPos.y += gravity;
+	else if (playerPos.y > app->scene->battlefieldPos.y - playerRect.h) playerPos.y = app->scene->battlefieldPos.y - playerRect.h;
 	
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		playerAcc.x = 0.25f;
+		playerAcc.x = 10;
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		playerAcc.x = -0.25f;
+		playerAcc.x = -10;
 	}
 	else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
 	{
-		playerAcc.x = 1;
+		playerAcc.x = 20;
 	}
 	else playerAcc.x = 0;
 	
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		playerVel.y = -2;
+		playerVel.y = -40;
 	}
 	else playerVel.y = 0;
 		
