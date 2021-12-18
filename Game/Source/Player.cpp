@@ -9,6 +9,7 @@
 #include "Textures.h"
 #include "PerfTimer.h"
 #include "Shoot.h"
+#include "Collisions.h"
 
 #include "SDL/include/SDL.h"
 #include "Log.h"
@@ -51,6 +52,11 @@ bool Player::Start()
 
 	playerRect = { (int)playerPos.x, (int)playerPos.y, 32, 32 };
 	winScreenRect = {(SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 400) / 2, 600, 400 };
+
+	hit_player = app->coll->AddCollider(player, Collider::Type::PLAYER, 0, app->player);
+	/*near_right = app->coll->AddCollider({ player.x + player.w, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
+	near_left = app->coll->AddCollider({ player.x - 1, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
+	near_down = app->coll->AddCollider({ player.x, player.y + player.w, player.w, 4 }, Collider::Type::NEAR, 0, app->player);*/
 
 	return true;
 }
@@ -161,6 +167,62 @@ void Player::PosFromVel()
 	//Stop player at wall
 	if (playerPos.x < 50) playerPos.x = 50;
 	else if (playerPos.x > 1230 - playerRect.w) playerPos.x = 1230 - playerRect.w;
+}
+
+void Player::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c2->type == Collider::Type::WALL)
+	{
+		if (c1 == near_down)
+		{
+			if (playerVel.y > 0)
+			{
+				playerVel.y = c2->rect.y - player.h;
+
+				playerVel.y = 0;
+			}
+			else
+			{
+				jump = true;
+				down = false;
+			}
+		}
+		else if (c1 == near_right)
+		{
+			if (playerVel.x > 0 && player.x < c2->rect.x)
+			{
+				player.x = c2->rect.x - player.w;
+				playerVel.x = 0;
+			}
+			right = false;
+		}
+		else if (c1 == near_left)
+		{
+			if (playerVel.x < 0 && player.x > c2->rect.x)
+			{
+				//player.x = c2->rect.x + c2->rect.w;
+				playerVel.x = 0;
+			}
+			left = false;
+		}
+	}
+	/*if (c1 == near_down && c2->type == Collider::Type::PLAT)
+	{
+		if (momentum.y > 0)
+		{
+			if (player.x + player.h > c2->rect.x) player.y = c2->rect.y - player.h;
+			momentum.y = 0;
+		}
+		can_jump = true;
+		can_move_down = false;
+	}*/
+
+	/*if (c1 == hit_player && c2->type == Collider::Type::ENEMY)
+	{
+		die = true;
+		current_animation = &dying;
+		dying.Reset();
+	}*/
 }
 
 

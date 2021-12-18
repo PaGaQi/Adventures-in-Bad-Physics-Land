@@ -19,6 +19,7 @@ class Physics;
 class Player;
 class Shoot;
 class Timer;
+class Collisions;
 
 class App
 {
@@ -84,6 +85,7 @@ public:
 	Player* player;
 	Shoot* shoot;
 	Timer* timer;
+	Collisions* coll;
 
 
 	float dt = 0.0f;

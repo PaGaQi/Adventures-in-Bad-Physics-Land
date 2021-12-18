@@ -9,6 +9,8 @@
 #include "Player.h"
 #include "Shoot.h"
 #include "Timer.h"
+#include "Collider.h"
+#include "Collisions.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -28,6 +30,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	physics = new Physics();
 	player = new Player();
 	shoot = new Shoot();
+	coll = new Collisions();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -40,7 +43,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(physics);
 	AddModule(player);
 	AddModule(shoot);
-
+	AddModule(coll);
 	// Render last to swap buffer
 	AddModule(render);
 
