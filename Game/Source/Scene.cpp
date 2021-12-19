@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Collisions.h"
+#include "Player.h"
 #include "Collider.h"
 #include "Scene.h"
 
@@ -43,6 +44,10 @@ bool Scene::Start()
 	
 	battlefield = { (int)battlefieldPos.x , (int)battlefieldPos.y, battlefieldWidth, battlefieldHeight };
 
+	battlefieldUp = { (int)battlefieldPos.x , (int)battlefieldPos.y - 3, battlefieldWidth, 3 };
+	battlefieldRight = { (int)battlefieldPos.x + battlefieldWidth, (int)battlefieldPos.y, 32, battlefieldHeight };
+	battlefieldLeft = { (int)battlefieldPos.x - 32, (int)battlefieldPos.y, 32, battlefieldHeight };
+
 	wallWidth = 50;
 	wallHeight = SCREEN_HEIGHT - 160;
 
@@ -56,12 +61,17 @@ bool Scene::Start()
 	wallLeft = { (int)wallLeftPos.x , (int)wallLeftPos.y, wallWidth, wallHeight };
 
 	battlefieldCol = app->coll->AddCollider(battlefield, Collider::Type::WALL, 0, app->scene);
+	battlefieldUpCol = app->coll->AddCollider(battlefieldUp, Collider::Type::WALL, 0, app->scene);
+	battlefieldRightCol = app->coll->AddCollider(battlefieldRight, Collider::Type::WALL, 0, app->scene);
+	battlefieldLeftCol = app->coll->AddCollider(battlefieldLeft, Collider::Type::WALL, 0, app->scene);
+
 	return true;
 }
 
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	
 	return true;
 }
 
@@ -90,6 +100,10 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
+
+	app->render->DrawRectangle(battlefieldUp, 0, 255, 255, 100);
+	app->render->DrawRectangle(battlefieldRight, 0, 255, 255, 100);
+	app->render->DrawRectangle(battlefieldLeft, 0, 255, 255, 100);
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;

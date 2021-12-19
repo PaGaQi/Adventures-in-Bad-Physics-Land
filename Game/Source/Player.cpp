@@ -41,6 +41,7 @@ bool Player::Start()
 	gravity = 0.5f * PLAYER_GRAVITY;
 	playerFriction = 0.0f;
 	colForce = { 0, 0 };
+	playerImpulse = { 0, 0 };
 	mass = 1;
 
 	playerLose = 0;
@@ -87,7 +88,7 @@ bool Player::PreUpdate()
 
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
 		{
-			playerImpulse.y = -2;
+			playerImpulse.y = -1.5f;
 		}
 		else playerImpulse.y = 0;
 	}
@@ -97,13 +98,13 @@ bool Player::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) ImpulseToMouse(mouseRect.x, mouseRect.y);
 
 	//Lower X Friction if not touching the ground
-	if (playerPos.y <= app->scene->battlefieldPos.y - playerRect.h)
-	{
-		playerFriction = 0.2 * (playerVel.x);
-	}
-	else playerFriction = 0.5 * (playerVel.x);	
+	if (playerVel.x > 0) playerFriction = 0.5 * playerVel.x;
+	else if (playerVel.x < 0) playerFriction = 0.5 * (playerVel.x);
+	else if (playerVel.x == 0) playerFriction = 0;
 	
-	colForce.y = 0;
+	//playerFriction = 0.1 * (playerVel.x);
+
+	colForce = {0, 0};
 
 	return true;
 }
@@ -121,13 +122,14 @@ bool Player::Update(float dt)
 
 	PosFromVel();
 
-	playerRect.x = (int)playerPos.x;
-	playerRect.y = (int)playerPos.y;
+	playerRect.x = (int)playerPos.x;// -(playerRect.w / 2);
+	playerRect.y = (int)playerPos.y;// -(playerRect.h / 2);
 
 	playerCol->SetPos(playerRect.x, playerRect.y);
 
-	if (playerPos.y != 0) LOG("POS.y = %f", playerPos.y);
-	if (playerVel.y != 0) LOG("VEL.y = %f", playerVel.y);
+	//if (playerPos.y != 0) LOG("POS.y = %f", playerPos.y);
+	//if (playerPos.y != 0) LOG("TER.y = %i", app->scene->battlefield.y);
+	//if (playerVel.y != 0) LOG("VEL.y = %f", playerVel.y);
 
 	if (playerPos.x < 0 && playerPos.x > 1200) playerPos.x = 32;
 
@@ -140,6 +142,10 @@ bool Player::PostUpdate()
 
 	app->render->DrawRectangle(playerCol->rect, 0, 255, 0, 100);
 
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT) app->render->DrawLine(playerPos.x, playerPos.y, playerPos.x, playerPos.y, 0, 255, 0);
+	
+	//if (playerImpulse.x != 0 || playerImpulse.y != 0)app->render->DrawLine(playerPos.x, playerPos.y, mouseRect.x, mouseRect.y, 0, 255, 0);
+
 	if (gameEnd)
 	{
 		if (!playerLose) app->render->DrawTexture(playerWinScreen, winScreenRect.x, winScreenRect.y);
@@ -151,14 +157,14 @@ bool Player::PostUpdate()
 		playerLose = 1;
 		gameEnd = 1;
 	}
-	
+
 	return true;
 }
 
 void Player::ImpulseToMouse(int lastMouseX, int lastMouseY)
 {
-	player2Mouse.x = mouseRect.x - playerPos.x;
-	player2Mouse.y = mouseRect.y - playerPos.y;
+	player2Mouse.x = mouseRect.x - playerPos.x - (playerRect.w / 2);
+	player2Mouse.y = mouseRect.y - playerPos.y + (playerRect.h / 2);
 
 	player2MouseModule = sqrt(pow(player2Mouse.x, 2) + pow(player2Mouse.y, 2));
 
@@ -170,13 +176,13 @@ void Player::ImpulseToMouse(int lastMouseX, int lastMouseY)
 
 void Player::AccFromForce()
 {
-	playerAcc.x = (playerImpulse.x + colForce.x )/ mass; //a = F / m
+	playerAcc.x = (playerImpulse.x + colForce.x - playerFriction)/ mass; //a = F / m
 	playerAcc.y = (playerImpulse.y + gravity + colForce.y) / mass; //a = F / m
 }
 
 void Player::VelFromAcc()
 {	
-	playerVel.x += playerAcc.x - playerFriction;
+	playerVel.x += playerAcc.x;
 	playerVel.y += playerAcc.y - 0.5 * (playerVel.y);
 }												
 												
@@ -195,51 +201,51 @@ void Player::PosFromVel()
 }
 
 void Player::OnCollision(Collider* c1, Collider* c2)
-{
+{	
 	if (c2->type == Collider::Type::WALL)
-	{
+	{	
+		//If the player is clipping through the floor, bring him up		
+		//if (playerImpulse.y > 0) colForce.y -= playerImpulse.y;
 		
-
-		if (playerCol->Intersects(app->scene->battlefield))
+		if (playerCol->Intersects(app->scene->battlefieldUp))				
 		{
-			LOG("PLAYER CLIPPING THROUGH MAP");			
+			colForce.y = -gravity;		
+			if (playerImpulse.y > 0) playerImpulse.y = 0;
+		}
+
+		if (playerCol->Intersects(app->scene->battlefieldRight))
+		{
+			if (playerImpulse.x < 0)
+			{
+				playerImpulse.x = 0;
+				playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
+			}
+		}	
+		if (playerCol->Intersects(app->scene->battlefieldLeft))
+		{
+			if (playerImpulse.x > 0)
+			{
+				playerImpulse.x = 0;
+				playerPos.x = app->scene->battlefield.x - playerRect.h;
+			}
+		}
+
+		if (playerCol->Intersects(app->scene->battlefield) && !playerCol->Intersects(app->scene->battlefieldLeft) && !playerCol->Intersects(app->scene->battlefieldRight))
+		{
 			colForce.y += 0.1f * (app->scene->battlefield.y - playerRect.y - playerRect.h) * gravity;
-		}
-		else colForce.y = -gravity;
-		
-		if (c1 == near_down)
-		{
-			if (playerVel.y > 0)
-			{
-				playerVel.y = c2->rect.y - playerRect.h;
+			if (playerImpulse.y > 0) playerImpulse.y = - 0;
 
-				playerVel.y = 0;
-			}
-			else
-			{
-				jump = true;
-				down = false;
-			}
+			playerPos.y = app->scene->battlefield.y - playerRect.h;
 		}
-		else if (c1 == near_right)
-		{
-			if (playerVel.x > 0 && playerRect.x < c2->rect.x)
-			{
-				playerRect.x = c2->rect.x - playerRect.w;
-				playerVel.x = 0;
-			}
-			right = false;
-		}
-		else if (c1 == near_left)
-		{
-			if (playerVel.x < 0 && playerRect.x > c2->rect.x)
-			{
-				//player.x = c2->rect.x + c2->rect.w;
-				playerVel.x = 0;
-			}
-			left = false;
-		}
-	}	
+		
+
+	}
+	
+	if (c2->type == Collider::Type::NEAR)
+	{		
+	
+	
+	}
 }
 
 
@@ -248,6 +254,9 @@ void Player::Restart()
 	gravity = 0.5f * PLAYER_GRAVITY;
 	playerFriction = 0.0f;
 	mass = 1;
+
+	colForce = { 0, 0 };
+	playerImpulse = { 0,0 };
 
 	playerLose = 0;
 	gameEnd = 0;

@@ -48,8 +48,7 @@ public:
 	bool direction;
 	int mass;
 
-	SDL_Rect playerRect;
-	
+	SDL_Rect playerRect;	
 	
 	// The player spritesheet loaded into an SDL_Texture
 	SDL_Rect winScreenRect;
@@ -73,11 +72,10 @@ public:
 	bool playerLose;
 
 private:
-	Collider* hit_player;
-	Collider* near_up;
-	Collider* near_down;
-	Collider* near_right;
-	Collider* near_left;
+	Collider* playerColUp;
+	Collider* playerColDown;
+	Collider* playerColRight;
+	Collider* playerColLeft;
 
 	Collider* playerCol;
 

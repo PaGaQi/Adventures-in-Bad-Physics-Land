@@ -25,10 +25,10 @@ Collisions::Collisions() : Module()
 	matrix[Collider::Type::PLAYER][Collider::Type::WALL] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::ENEMY] = true;
-	matrix[Collider::Type::PLAYER][Collider::Type::NEAR] = false;
+	matrix[Collider::Type::PLAYER][Collider::Type::NEAR] = true;
 
 	matrix[Collider::Type::NEAR][Collider::Type::WALL] = true;
-	matrix[Collider::Type::NEAR][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::NEAR][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::NEAR][Collider::Type::ENEMY] = true;
 	matrix[Collider::Type::NEAR][Collider::Type::NEAR] = false;
 

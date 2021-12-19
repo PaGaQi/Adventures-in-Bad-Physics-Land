@@ -36,10 +36,13 @@ public:
 
 	SDL_Rect battlefield;
 	Vec2 battlefieldPos;
+
+	SDL_Rect battlefieldUp;
+	SDL_Rect battlefieldRight;
+	SDL_Rect battlefieldLeft;
 	
 	int battlefieldWidth;
 	int battlefieldHeight;
-
 
 	SDL_Rect wallRight;
 	Vec2 wallRightPos;
@@ -56,6 +59,10 @@ public:
 	Collider* near_left;
 
 	Collider* battlefieldCol;
+
+	Collider* battlefieldUpCol;
+	Collider* battlefieldRightCol;
+	Collider* battlefieldLeftCol;
 
 	bool right;
 	bool left;
