@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "Collider.h"
 #include "Collisions.h"
+#include "Enemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -31,6 +32,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new Player();
 	shoot = new Shoot();
 	coll = new Collisions();
+	enemy = new Enemy();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -46,6 +48,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(coll);
 	// Render last to swap buffer
 	AddModule(render);
+	AddModule(enemy);
 
 	//Delta Time Modules
 	ptimer = new PerfTimer();
