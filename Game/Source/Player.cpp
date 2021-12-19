@@ -122,7 +122,7 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN && gameEnd)
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		Restart();
 	}
@@ -380,6 +380,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			//if (playerPos.x < playerPos) 
 			colForce.x = app->enemigo->enemyImpulse.x;
 			if (playerImpulse.x == 0) playerPos.x += 0.1f * (playerPos.x - app->enemigo->enemyPos.x);
+			//if (playerImpulse.x != 0 && playerImpulse.x ==)
 		}
 
 		
@@ -411,6 +412,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 
 void Player::Restart()
 {
+	app->enemigo->Restart();
 	gravity = 0.5f * PLAYER_GRAVITY;
 	playerFriction = 0.0f;
 	mass = 1;

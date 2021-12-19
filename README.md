@@ -7,8 +7,8 @@
 ## CONTROLS
 
  - {Player 1: WAD: Jump/Left/Right}
- - {Player 1 Jump to mouse POS: Space}
- - {Player 2: Arrows: Right Arrow(right)/Left Arrow(left)/Upper Arrow(jump) }
+ - {Player 1 Jump to mouse POS: S}
+ - {Player 2: Arrows: Jump/Left/Right }
  - {Player 2 Jump to mouse POS: Down Arrow}
    {DEBUG KEYS:}
  - {F1 Enable showing battlefield colliders}

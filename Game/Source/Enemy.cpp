@@ -24,7 +24,6 @@ Enemigo::Enemigo()
 	direction = 0;
 	enemyRect = { 0, 0, 32, 32 };
 	enemyCol;
-
 }
 
 // Destructor
@@ -48,7 +47,7 @@ bool Enemigo::Start()
 	enemyLose = 0;
 	gameEnd = 0;
 
-	enemyPos = { 1100, 0 };
+	enemyPos = { 1140 - 32, 0 };
 	enemyVel = { 0, 0 };
 	enemyAcc = { 0, 0 };
 
@@ -109,7 +108,7 @@ bool Enemigo::PreUpdate()
 
 bool Enemigo::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN && gameEnd)
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		Restart();
 	}
@@ -235,16 +234,14 @@ void Enemigo::OnCollision(Collider* c1, Collider* c2)
 
 			enemyPos.y = app->scene->battlefield.y - enemyRect.h;
 		}
-
-
 	}
 
 	if (c2->type == Collider::Type::PLAYER)
 	{
-			colForce.x = app->player->playerImpulse.x;
 		if (enemyCol->Intersects(app->player->playerRect))
 		{
 			//if (playerPos.x < playerPos) 
+			colForce.x = app->player->playerImpulse.x;
 			if (enemyImpulse.x == 0) enemyPos.x += 0.1f * (enemyPos.x - app->player->playerPos.x);
 		}
 	}
@@ -263,7 +260,7 @@ void Enemigo::Restart()
 	enemyLose = 0;
 	gameEnd = 0;
 
-	enemyPos = { 140, 0 };
+	enemyPos = { 1140 - 32, 0 };
 	enemyVel = { 0, 0 };
 	enemyAcc = { 0, 0 };
 
