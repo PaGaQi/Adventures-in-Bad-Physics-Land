@@ -239,6 +239,53 @@ void Enemigo::OnCollision(Collider* c1, Collider* c2)
 
 	}
 
+	if (!enemyCol->Intersects(app->player->playerRect))
+	{
+		/*colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y - playerRect.h) * gravity;
+		if (playerImpulse.y > 0) playerImpulse.y = -0;
+
+		playerPos.y = app->enemigo->enemyRect.y - playerRect.h;*/
+	}
+
+	/*else if (enemyCol->Intersects(app->player->playerRect))
+	{
+		/*colForce.y += 0.1f * (app->player->playerRect.y - enemyRect.y - enemyRect.w) * gravity;
+		if (enemyImpulse.y > 0) enemyImpulse.y = -0;
+
+		//enemyPos.y = app->player->playerRect.y - enemyRect.h;
+		//colForce.y += 0.1f * (enemyRect.y + enemyRect.h - app->player->playerRect.y) * gravity;
+		//if (enemyImpulse.y > 0) enemyImpulse.y = -0;
+
+		//app->player->playerPos.y =  app->player->playerRect.y + enemyRect.w;
+		//enemyPos.y = app->player->playerRect.y + enemyRect.h;
+
+		/*colForce.y += 0.1f * (app->player->playerRect.y - enemyRect.y - enemyRect.h) * gravity;
+		if (enemyImpulse.y > 0) enemyImpulse.y = -0;
+
+		//playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
+		app->player->playerPos.x = app->player->playerPos.y - 0.05;
+		//playerPos.x = playerPos.y + 0.00005;
+	}*/
+
+	if (enemyCol->Intersects(app->player->playerRect))
+	{
+
+		if (!enemyCol->Intersects(app->player->playerRect))
+		{
+			colForce.y += 0.1f * (app->player->playerRect.y - enemyRect.y - enemyRect.h) * gravity;
+			if (enemyImpulse.y > 0) enemyImpulse.y = -0;
+
+			enemyPos.y = app->player->playerRect.y - enemyRect.h;
+		}
+
+		else if (enemyCol->Intersects(app->player->playerRect))
+		{
+			app->player->playerPos.x = app->player->playerRect.y - enemyRect.h;
+		}
+
+
+	}
+
 	if (c2->type == Collider::Type::NEAR)
 	{
 
@@ -259,7 +306,7 @@ void Enemigo::Restart()
 	enemyLose = 0;
 	gameEnd = 0;
 
-	enemyPos = { 140, 0 };
+	enemyPos = { 1100, 0 };
 	enemyVel = { 0, 0 };
 	enemyAcc = { 0, 0 };
 
