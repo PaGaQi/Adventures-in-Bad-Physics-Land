@@ -4,6 +4,8 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
+#include "Collisions.h"
+#include "Collider.h"
 #include "Scene.h"
 
 #include "Defs.h"
@@ -52,6 +54,8 @@ bool Scene::Start()
 
 	wallRight = { (int)wallRightPos.x , (int)wallRightPos.y, wallWidth, wallHeight };
 	wallLeft = { (int)wallLeftPos.x , (int)wallLeftPos.y, wallWidth, wallHeight };
+
+	battlefieldCol = app->coll->AddCollider(battlefield, Collider::Type::WALL, 0, app->scene);
 	return true;
 }
 

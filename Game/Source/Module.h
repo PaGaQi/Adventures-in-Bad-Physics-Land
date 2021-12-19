@@ -2,11 +2,11 @@
 #define __MODULE_H__
 
 #include "SString.h"
-#include "Collider.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
+class Collider;
 
 class Module
 {

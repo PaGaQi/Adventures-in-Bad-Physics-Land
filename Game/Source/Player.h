@@ -62,6 +62,7 @@ public:
 	float gravity;
 	float playerFriction;
 	Vec2 playerImpulse;
+	Vec2 colForce;
 
 	SDL_Rect mouseRect;
 
@@ -71,8 +72,6 @@ public:
 	bool gameEnd;
 	bool playerLose;
 
-	SDL_Rect player;
-
 private:
 	Collider* hit_player;
 	Collider* near_up;
@@ -80,7 +79,7 @@ private:
 	Collider* near_right;
 	Collider* near_left;
 
-
+	Collider* playerCol;
 
 	bool right;
 	bool left;

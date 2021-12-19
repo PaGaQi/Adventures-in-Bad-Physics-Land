@@ -50,6 +50,17 @@ public:
 	int wallWidth;
 	int wallHeight;
 
+	Collider* near_up;
+	Collider* near_down;
+	Collider* near_right;
+	Collider* near_left;
+
+	Collider* battlefieldCol;
+
+	bool right;
+	bool left;
+	bool down;
+	bool up;
 
 private:
 	SDL_Texture* img;

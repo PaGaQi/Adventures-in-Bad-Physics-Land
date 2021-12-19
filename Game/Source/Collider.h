@@ -185,6 +185,7 @@ private:
 #define __COLLIDER_H__
 
 #include "SDL/include/SDL_Rect.h"
+#include "Module.h"
 
 #define MAX_LISTENERS 8
 
