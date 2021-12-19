@@ -20,7 +20,7 @@ class Player;
 class Shoot;
 class Timer;
 class Collisions;
-class Enemy;
+class Enemigo;
 
 class App
 {
@@ -87,7 +87,7 @@ public:
 	Shoot* shoot;
 	Timer* timer;
 	Collisions* coll;
-	Enemy* enemy;
+	Enemigo* enemigo;
 
 
 	float dt = 0.0f;

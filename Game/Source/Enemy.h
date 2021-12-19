@@ -7,14 +7,14 @@
 #include "Collisions.h"
 #include "Collider.h"
 
-class Enemy : public Module
+class Enemigo : public Module
 {
 public:
 
-	Enemy();
+	Enemigo();
 
 	// Destructor
-	virtual ~Enemy();
+	virtual ~Enemigo();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -54,11 +54,11 @@ public:
 
 
 	// The player spritesheet loaded into an SDL_Texture
-	SDL_Rect winScreenRect;
-	SDL_Texture* playerWinScreen;
+	//SDL_Rect winScreenRect;
+	//SDL_Texture* playerWinScreen;
 
 	//TEMPORARY WHILE WE DON'T HAVE ENEMY MODULE
-	SDL_Texture* enemyWinScreen;
+	//SDL_Texture* enemyWinScreen;
 
 	//Forces
 	float gravity;

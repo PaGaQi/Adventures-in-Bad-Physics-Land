@@ -125,7 +125,7 @@ void PhysicBody::OnCollisionLeave(PhysicBody* col)
 }*/
 #include "Collider.h"
 #include "Module.h"
-//#include "Enemy.h"
+#include "Enemy.h"
 
 #include "SDL/include/SDL.h"
 

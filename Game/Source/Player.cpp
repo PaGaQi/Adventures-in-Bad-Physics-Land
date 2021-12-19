@@ -146,7 +146,7 @@ bool Player::PostUpdate()
 	
 	//if (playerImpulse.x != 0 || playerImpulse.y != 0)app->render->DrawLine(playerPos.x, playerPos.y, mouseRect.x, mouseRect.y, 0, 255, 0);
 
-	if (gameEnd)
+	if (gameEnd||app->enemigo->gameEnd)
 	{
 		if (!playerLose) app->render->DrawTexture(playerWinScreen, winScreenRect.x, winScreenRect.y);
 		if (playerLose) app->render->DrawTexture(enemyWinScreen, winScreenRect.x, winScreenRect.y);		

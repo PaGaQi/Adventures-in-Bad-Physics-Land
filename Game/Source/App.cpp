@@ -32,7 +32,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new Player();
 	shoot = new Shoot();
 	coll = new Collisions();
-	enemy = new Enemy();
+	enemigo = new Enemigo();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -44,11 +44,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(physics);
 	AddModule(player);
+	AddModule(enemigo);
 	AddModule(shoot);
 	AddModule(coll);
 	// Render last to swap buffer
 	AddModule(render);
-	AddModule(enemy);
+	
 
 	//Delta Time Modules
 	ptimer = new PerfTimer();

@@ -187,7 +187,7 @@ private:
 #include "SDL/include/SDL_Rect.h"
 #include "Module.h"
 
-#define MAX_LISTENERS 8
+#define MAX_LISTENERS 20
 
 class Enemy;
 class Module;

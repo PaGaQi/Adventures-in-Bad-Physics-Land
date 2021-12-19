@@ -4,7 +4,7 @@
 #define MAX_COLLIDERS 300
 
 #include "Module.h"
-//#include "Enemy.h"
+#include "Enemy.h"
 #include "Collider.h"
 
 class Collisions : public Module
