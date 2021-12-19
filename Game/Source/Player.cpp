@@ -6,7 +6,6 @@
 #include "Module.h"
 #include "Input.h"
 #include "Timer.h"
-#include "Enemy.h"
 #include "Textures.h"
 #include "PerfTimer.h"
 #include "Shoot.h"
@@ -295,49 +294,6 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			{
 				playerPos.x = app->scene->leftWall.x + app->scene->leftWall.w;
 			}
-		}
-
-		/*if (!playerCol->Intersects(app->enemigo->enemyRect))
-		{
-			/*colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y - playerRect.h) * gravity;
-			if (playerImpulse.y > 0) playerImpulse.y = -0;
-
-			playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-		}
-
-		else if (playerCol->Intersects(app->enemigo->enemyRect))
-		{
-			//colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y - playerRect.h) * gravity;
-			if (playerImpulse.y > 0) playerImpulse.y = -0;
-
-			//playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-			app->enemigo->enemyPos.x = app->enemigo->enemyPos.y - playerImpulse.y;
-			//playerPos.x = playerPos.y + 0.00005;
-		}*/
-		//PLAYER COLLIDERRS WITH ENEMY
-		
-
-	}
-
-	if (c2->type == Collider::Type::PLAYER)
-	{
-		if (playerCol->Intersects(app->enemigo->enemyRect))
-		{
-
-			if (!playerCol->Intersects(app->enemigo->enemyRect))
-			{
-				colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y - playerRect.h) * gravity;
-				if (playerImpulse.y > 0) playerImpulse.y = -0;
-
-				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-			}
-
-			else if (playerCol->Intersects(app->enemigo->enemyRect))
-			{
-				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-			}
-
-
 		}
 	}
 
