@@ -23,7 +23,6 @@ Player::Player()
 	direction = 0;
 	playerRect = { 0, 0, 32, 32 };
 	playerCol;
-
 }
 
 // Destructor
@@ -60,10 +59,7 @@ bool Player::Start()
 	winScreenRect = {(SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 400) / 2, 600, 400 };
 
 	playerCol = app->coll->AddCollider(playerRect, Collider::Type::PLAYER, 0, app->player);
-	/*near_right = app->coll->AddCollider({ player.x + player.w, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
-	near_left = app->coll->AddCollider({ player.x - 1, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
-	near_down = app->coll->AddCollider({ player.x, player.y + player.w, player.w, 4 }, Collider::Type::NEAR, 0, app->player);*/
-
+	
 	return true;
 }
 
@@ -177,7 +173,7 @@ void Player::ImpulseToMouse(int lastMouseX, int lastMouseY)
 void Player::AccFromForce()
 {
 	playerAcc.x = (playerImpulse.x + colForce.x - playerFriction)/ mass; //a = F / m
-	playerAcc.y = (playerImpulse.y + gravity + colForce.y) / mass; //a = F / m
+	playerAcc.y = (playerImpulse.y + gravity + colForce.y) / mass;		//a = F / m
 }
 
 void Player::VelFromAcc()
@@ -192,28 +188,25 @@ void Player::PosFromVel()
 	playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
 
 	
-	playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));	
-
+	playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
 
 	//Stop player at wall
-	if (playerPos.x < 50) playerPos.x = 50;
-	else if (playerPos.x > 1230 - playerRect.w) playerPos.x = 1230 - playerRect.w;
+	//if (playerPos.x < 50) playerPos.x = 50;
+	//else if (playerPos.x > 1230 - playerRect.w) playerPos.x = 1230 - playerRect.w;
 }
 
 void Player::OnCollision(Collider* c1, Collider* c2)
 {	
 	if (c2->type == Collider::Type::WALL)
-	{	
-		//If the player is clipping through the floor, bring him up		
-		//if (playerImpulse.y > 0) colForce.y -= playerImpulse.y;
-		
+	{		
+		//BATTLEFIELD COLLISIONS-------------------------------------------------------------------------------
 		if (playerCol->Intersects(app->scene->battlefieldUp))				
 		{
 			colForce.y = -gravity;		
 			if (playerImpulse.y > 0) playerImpulse.y = 0;
 		}
 
-		if (playerCol->Intersects(app->scene->battlefieldRight))
+		else if (playerCol->Intersects(app->scene->battlefieldRight))
 		{
 			if (playerImpulse.x < 0)
 			{
@@ -221,31 +214,89 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 				playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
 			}
 		}	
-		if (playerCol->Intersects(app->scene->battlefieldLeft))
+		else if (playerCol->Intersects(app->scene->battlefieldLeft))
 		{
-			if (playerImpulse.x > 0)
+			if (playerImpulse.x > 0 )//&& playerPos.x == app->scene->battlefieldLeft.x)
 			{
 				playerImpulse.x = 0;
-				playerPos.x = app->scene->battlefield.x - playerRect.h;
+				playerPos.x = app->scene->battlefield.x - playerRect.w;
 			}
 		}
 
-		if (playerCol->Intersects(app->scene->battlefield) && !playerCol->Intersects(app->scene->battlefieldLeft) && !playerCol->Intersects(app->scene->battlefieldRight))
+		if (playerCol->Intersects(app->scene->battlefield))
 		{
-			colForce.y += 0.1f * (app->scene->battlefield.y - playerRect.y - playerRect.h) * gravity;
-			if (playerImpulse.y > 0) playerImpulse.y = - 0;
+			if (!playerCol->Intersects(app->scene->battlefieldLeft) && !playerCol->Intersects(app->scene->battlefieldRight))
+			{
+				colForce.y += 0.1f * (app->scene->battlefield.y - playerRect.y - playerRect.h) * gravity;
+				if (playerImpulse.y > 0) playerImpulse.y = -0;
 
-			playerPos.y = app->scene->battlefield.y - playerRect.h;
+				playerPos.y = app->scene->battlefield.y - playerRect.h;
+			}
+
+			if (playerCol->Intersects(app->scene->battlefieldLeft))
+			{
+				playerPos.x = app->scene->battlefield.x - playerRect.w;
+			}
+
+			else if (playerCol->Intersects(app->scene->battlefieldRight))
+			{
+				playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
+			}
+		
 		}
 		
+		//WALL COLLISIONS------------------------------------------------------------------------------------------
+		if (playerCol->Intersects(app->scene->leftWallNearRect))
+		{
+			if (playerImpulse.x < 0)
+			{
+				playerImpulse.x = 0;
+				playerPos.x = app->scene->wallWidth;
+			}
+		}
 
+		else if (playerCol->Intersects(app->scene->rightWallNearRect))
+		{
+			if (playerImpulse.x > 0 && playerPos.x >= app->scene->rightWallNearRect.x)
+			{
+				playerImpulse.x = 0;
+				playerPos.x = SCREEN_WIDTH - app->scene->wallWidth - playerRect.w;
+			}
+		}
+
+		if (playerCol->Intersects(app->scene->rightWall))
+		{
+			if (!playerCol->Intersects(app->scene->rightWallNearRect))
+			{
+				colForce.x -= 0.2f * (app->scene->rightWall.w + playerRect.x + playerRect.w);
+				if (playerImpulse.x > 0) playerImpulse.x = 0;
+
+				playerPos.y = app->scene->battlefield.y - playerRect.h;
+			}
+
+			else if (playerCol->Intersects(app->scene->rightWallNearRect))
+			{
+				playerPos.x = SCREEN_WIDTH - app->scene->rightWall.w - 32;
+			}
+		}
+
+		if (playerCol->Intersects(app->scene->leftWall))
+		{
+			if (!playerCol->Intersects(app->scene->leftWallNearRect))
+			{
+				colForce.x += 0.2f * (app->scene->leftWall.w + playerRect.x + playerRect.w);
+				if (playerImpulse.x > 0) playerImpulse.x = 0;
+
+				playerPos.x = app->scene->leftWall.w + playerRect.w;
+			}
+
+			else if (playerCol->Intersects(app->scene->leftWallNearRect))
+			{
+				playerPos.x = app->scene->leftWall.x + app->scene->leftWall.w;
+			}
+		}
 	}
-	
-	if (c2->type == Collider::Type::NEAR)
-	{		
-	
-	
-	}
+
 }
 
 

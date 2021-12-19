@@ -34,6 +34,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Ground Positions and Colliders
 	SDL_Rect battlefield;
 	Vec2 battlefieldPos;
 
@@ -44,30 +45,39 @@ public:
 	int battlefieldWidth;
 	int battlefieldHeight;
 
-	SDL_Rect wallRight;
-	Vec2 wallRightPos;
-
-	SDL_Rect wallLeft;
-	Vec2 wallLeftPos;
-
-	int wallWidth;
-	int wallHeight;
-
-	Collider* near_up;
-	Collider* near_down;
-	Collider* near_right;
-	Collider* near_left;
-
 	Collider* battlefieldCol;
 
 	Collider* battlefieldUpCol;
 	Collider* battlefieldRightCol;
 	Collider* battlefieldLeftCol;
 
+	//Right Wall Positions and Colliders
+	SDL_Rect rightWall;
+	Vec2 rightWallPos;
+
+	Collider* rightWallCol;
+
+	SDL_Rect rightWallNearRect;
+	Collider* rightWallNearCol;
+
+	//Left Wall Positions and Colliders
+	SDL_Rect leftWall;
+	Vec2 leftWallPos;
+
+	Collider* leftWallCol;
+
+	SDL_Rect leftWallNearRect;
+	Collider* leftWallNearCol;
+
+	int wallWidth;
+	int wallHeight;	
+
 	bool right;
 	bool left;
 	bool down;
 	bool up;
+
+	bool seeCols;
 
 private:
 	SDL_Texture* img;

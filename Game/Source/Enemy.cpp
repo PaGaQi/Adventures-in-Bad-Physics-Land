@@ -59,7 +59,7 @@ bool Enemy::Start()
 	enemyRect = { (int)enemyPos.x, (int)enemyPos.y, 32, 32 };
 	winScreenRect = { (SCREEN_WIDTH - 600) / 2, (SCREEN_HEIGHT - 400) / 2, 600, 400 };
 
-	enemyCol = app->coll->AddCollider(enemyRect, Collider::Type::PLAYER, 0, app->player);
+	enemyCol = app->coll->AddCollider(enemyRect, Collider::Type::NONE, 0, app->enemy);
 	/*near_right = app->coll->AddCollider({ player.x + player.w, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
 	near_left = app->coll->AddCollider({ player.x - 1, player.y, 1, player.h - 1 }, Collider::Type::NEAR, 0, app->player);
 	near_down = app->coll->AddCollider({ player.x, player.y + player.w, player.w, 4 }, Collider::Type::NEAR, 0, app->player);*/
@@ -134,9 +134,9 @@ bool Enemy::Update(float dt)
 
 bool Enemy::PostUpdate()
 {
-	app->render->DrawRectangle(enemyRect, 255, 0, 0, 255);
+	//app->render->DrawRectangle(enemyRect, 255, 0, 0, 255);
 
-	app->render->DrawRectangle(enemyCol->rect, 0, 255, 0, 100);
+	//app->render->DrawRectangle(enemyCol->rect, 0, 255, 0, 100);
 
 	if (gameEnd)
 	{
