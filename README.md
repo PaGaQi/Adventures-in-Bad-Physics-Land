@@ -1,26 +1,25 @@
-# {Project Name}
+# {Adventures in Bad Physics Land}
 
-## Description
+## DESCRIPTION
 
-{project description}
+{Implementation of some of the physics that  learned in class in a 1vs1 game, in which you have to throw the other player to the empty spaces by colliding between them}
 
-## Key Features
+## CONTROLS
 
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
- 
-## Controls
+ - {Player 1: WAD: Jump/Left/Right}
+ - {Player 1 Jump to mouse POS: Space}
+ - {Player 2: Arrows: Right Arrow(right)/Left Arrow(left)/Upper Arrow(jump) }
+ - {Player 2 Jump to mouse POS: Down Arrow}
+   {DEBUG KEYS:}
+ - {F1 Enable showing battlefield colliders}
+ - {F9 Show all colliders}
+ - {R Restart}
 
- - {ControlsScheme}
+## TEAM MEMBERS
 
-## Developers
+ - {Pau Garcia Quiroga} 
+ - {Juan Fernando Almendro Marí} 
 
- - {Dev01} - {Role(s)}
- - {Dev02} - {Role(s)}
- - {Dev03} - {Role(s)}
- - {Dev04} - {Role(s)}
 
 ## License
 
