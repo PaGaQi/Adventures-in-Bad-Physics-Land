@@ -14,7 +14,7 @@
 #include "SDL/include/SDL.h"
 #include "Log.h"
 
-#define PLAYER_GRAVITY 5
+#define PLAYER_GRAVITY 4
 
 Player::Player()
 {
@@ -94,7 +94,12 @@ bool Player::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) ImpulseToMouse(mouseRect.x, mouseRect.y);
 
 
-	playerFriction = 0.5 * (playerVel.x);	
+	//Lower X Friction if not touching the ground
+	if (playerPos.y <= app->scene->battlefieldPos.y - playerRect.h)
+	{
+		playerFriction = 0.2 * (playerVel.x);
+	}
+	else playerFriction = 0.5 * (playerVel.x);	
 	
 	return true;
 }
@@ -105,7 +110,7 @@ bool Player::Update(float dt)
 	{
 		Restart();
 	}
-	
+
 	AccFromForce();
 
 	VelFromAcc();
@@ -154,8 +159,8 @@ void Player::ImpulseToMouse(int lastMouseX, int lastMouseY)
 
 	player2MouseModule = sqrt(pow(player2Mouse.x, 2) + pow(player2Mouse.y, 2));
 
-	playerImpulse.x = 4 * (player2Mouse.x / player2MouseModule);
-	playerImpulse.y = 4 * (player2Mouse.y / player2MouseModule);
+	playerImpulse.x = 3 * (player2Mouse.x / player2MouseModule);
+	playerImpulse.y = 3 * (player2Mouse.y / player2MouseModule);
 
 	LOG("X: %f / Y: %f / M: %f", player2Mouse.x, player2Mouse.y, player2MouseModule);
 }
@@ -178,8 +183,16 @@ void Player::PosFromVel()
 	playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
 
 	//Apply gravity only when the player isn't on the ground
-	if (playerPos.y < app->scene->battlefieldPos.y - playerRect.h || (playerPos.x < 140 || playerPos.x > 1140)) playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y + gravity) * sqrt(app->dt));
-	else if (playerPos.y >= app->scene->battlefieldPos.y - playerRect.h) playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
+	if (playerPos.y <= app->scene->battlefieldPos.y - playerRect.h || (playerPos.x < 140 || playerPos.x > 1140))
+	{
+		playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y + gravity) * sqrt(app->dt));
+	}
+	else if (playerPos.y >= app->scene->battlefieldPos.y - playerRect.h)
+	{
+		playerPos.y += (playerVel.y * app->dt) + (0.5f * (playerAcc.y) * sqrt(app->dt));
+		playerFriction = 0.5 * playerVel.x;
+	}
+
 	//&& (playerPos.x < 140 || playerPos.x > 1140)
 
 
