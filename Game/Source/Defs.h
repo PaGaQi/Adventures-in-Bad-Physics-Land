@@ -75,4 +75,11 @@ struct Vec2
 	float x, y;
 };
 
+enum Mode
+{
+	NORMAL = 0,
+	ELASTIC = 1,
+	STICKY = 2
+};
+
 #endif	// __DEFS_H__

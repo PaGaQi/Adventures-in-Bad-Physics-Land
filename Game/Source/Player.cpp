@@ -23,6 +23,8 @@ Player::Player()
 	direction = 0;
 	playerRect = { 0, 0, 32, 32 };
 	playerCol;
+
+	playerMode = NORMAL;
 }
 
 // Destructor
@@ -60,6 +62,8 @@ bool Player::Start()
 
 	playerCol = app->coll->AddCollider(playerRect, Collider::Type::PLAYER, 0, app->player);
 	
+	playerMode = NORMAL;
+
 	return true;
 }
 
@@ -68,6 +72,7 @@ bool Player::PreUpdate()
 {
 	if (!gameEnd)
 	{
+		//Basic Movements
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			playerImpulse.x = 0.5f;
@@ -75,11 +80,7 @@ bool Player::PreUpdate()
 		else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
 			playerImpulse.x = -0.5f;
-		}
-		else if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
-		{
-			playerImpulse.x = 5;
-		}
+		}		
 		else playerImpulse.x = 0;
 
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
@@ -87,11 +88,24 @@ bool Player::PreUpdate()
 			playerImpulse.y = -1.5f;
 		}
 		else playerImpulse.y = 0;
+
+		//Impulse to Mouse
+		SDL_GetMouseState(&mouseRect.x, &mouseRect.y);
+
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) ImpulseToMouse(mouseRect.x, mouseRect.y);
+
+		//Mode Change
+
+		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		{
+			if (playerMode == ELASTIC)
+			{
+				playerMode = NORMAL;
+			}
+			else playerMode = ELASTIC;
+
+		}
 	}
-
-	SDL_GetMouseState(&mouseRect.x, &mouseRect.y);
-
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) ImpulseToMouse(mouseRect.x, mouseRect.y);
 
 	//Lower X Friction if not touching the ground
 	if (playerVel.x > 0) playerFriction = 0.5 * playerVel.x;
@@ -99,7 +113,8 @@ bool Player::PreUpdate()
 	else if (playerVel.x == 0) playerFriction = 0;
 	
 	//playerFriction = 0.1 * (playerVel.x);
-
+	if (playerMode == NORMAL) playerElast = 0;
+	else if (playerMode == ELASTIC) playerElast = -0;
 	colForce = {0, 0};
 
 	return true;
@@ -199,103 +214,197 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 {	
 	if (c2->type == Collider::Type::WALL)
 	{		
-		//BATTLEFIELD COLLISIONS-------------------------------------------------------------------------------
-		if (playerCol->Intersects(app->scene->battlefieldUp))				
+		switch (playerMode)
 		{
-			colForce.y = -gravity;		
-			if (playerImpulse.y > 0) playerImpulse.y = 0;
-		}
-
-		else if (playerCol->Intersects(app->scene->battlefieldRight))
+		case (NORMAL):
 		{
-			if (playerImpulse.x < 0)
+			//BATTLEFIELD COLLISIONS-------------------------------------------------------------------------------		
+			if (playerCol->Intersects(app->scene->battlefieldUp))
 			{
-				playerImpulse.x = 0;
-				playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
+				colForce.y = -gravity;
+				if (playerImpulse.y > 0) playerImpulse.y = 0;
 			}
-		}	
-		else if (playerCol->Intersects(app->scene->battlefieldLeft))
-		{
-			if (playerImpulse.x > 0 )//&& playerPos.x == app->scene->battlefieldLeft.x)
-			{
-				playerImpulse.x = 0;
-				playerPos.x = app->scene->battlefield.x - playerRect.w;
-			}
-		}
-
-		if (playerCol->Intersects(app->scene->battlefield))
-		{
-			if (!playerCol->Intersects(app->scene->battlefieldLeft) && !playerCol->Intersects(app->scene->battlefieldRight))
-			{
-				colForce.y += 0.1f * (app->scene->battlefield.y - playerRect.y - playerRect.h) * gravity;
-				if (playerImpulse.y > 0) playerImpulse.y = -0;
-
-				playerPos.y = app->scene->battlefield.y - playerRect.h;
-			}
-
-			if (playerCol->Intersects(app->scene->battlefieldLeft))
-			{
-				playerPos.x = app->scene->battlefield.x - playerRect.w;
-			}
-
 			else if (playerCol->Intersects(app->scene->battlefieldRight))
 			{
-				playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
+				if (playerImpulse.x < 0)
+				{
+					playerImpulse.x = 0;
+					playerPos.x += app->scene->battlefield.x + app->scene->battlefield.w;
+				}
 			}
-		
-		}
-		
-		//WALL COLLISIONS------------------------------------------------------------------------------------------
-		if (playerCol->Intersects(app->scene->leftWallNearRect))
-		{
-			if (playerImpulse.x < 0)
+			else if (playerCol->Intersects(app->scene->battlefieldLeft))
 			{
-				playerImpulse.x = 0;
-				playerPos.x = app->scene->wallWidth;
+				if (playerImpulse.x > 0)//&& playerPos.x == app->scene->battlefieldLeft.x)
+				{
+					playerImpulse.x = 0;
+					playerPos.x = app->scene->battlefield.x + playerRect.w;
+				}
 			}
-		}
 
-		else if (playerCol->Intersects(app->scene->rightWallNearRect))
-		{
-			if (playerImpulse.x > 0 && playerPos.x >= app->scene->rightWallNearRect.x)
+			if (playerCol->Intersects(app->scene->battlefield))
 			{
-				playerImpulse.x = 0;
-				playerPos.x = SCREEN_WIDTH - app->scene->wallWidth - playerRect.w;
+				if (!playerCol->Intersects(app->scene->battlefieldLeft) && !playerCol->Intersects(app->scene->battlefieldRight))
+				{
+					colForce.y += 0.1f * (app->scene->battlefield.y - playerRect.y - playerRect.h) * gravity;
+					if (playerImpulse.y > 0) playerImpulse.y = -0;
+
+					playerPos.y = app->scene->battlefield.y - playerRect.h;
+				}
+
+				if (playerCol->Intersects(app->scene->battlefieldLeft))
+				{
+					playerPos.x = app->scene->battlefield.x - playerRect.w;
+				}
+
+				else if (playerCol->Intersects(app->scene->battlefieldRight))
+				{
+					playerPos.x = app->scene->battlefield.x + app->scene->battlefield.w;
+				}
+
 			}
-		}
 
-		if (playerCol->Intersects(app->scene->rightWall))
-		{
-			if (!playerCol->Intersects(app->scene->rightWallNearRect))
+			//WALL COLLISIONS------------------------------------------------------------------------------------------
+			if (playerCol->Intersects(app->scene->leftWallNearRect))
 			{
-				colForce.x -= 0.2f * (app->scene->rightWall.w + playerRect.x + playerRect.w);
-				if (playerImpulse.x > 0) playerImpulse.x = 0;
-
-				playerPos.y = app->scene->battlefield.y - playerRect.h;
+				if (playerImpulse.x < 0)
+				{
+					playerImpulse.x = 0;
+					playerPos.x = app->scene->wallWidth;
+				}
 			}
 
 			else if (playerCol->Intersects(app->scene->rightWallNearRect))
 			{
-				playerPos.x = SCREEN_WIDTH - app->scene->rightWall.w - 32;
+				if (playerImpulse.x > 0 && playerPos.x >= app->scene->rightWallNearRect.x)
+				{
+					playerImpulse.x = 0;
+					playerPos.x = SCREEN_WIDTH - app->scene->wallWidth - playerRect.w;
+				}
+			}
+
+			if (playerCol->Intersects(app->scene->rightWall))
+			{
+				if (!playerCol->Intersects(app->scene->rightWallNearRect))
+				{
+					colForce.x -= 0.2f * (app->scene->rightWall.w + playerRect.x + playerRect.w);
+					if (playerImpulse.x > 0) playerImpulse.x = 0;
+
+					playerPos.y = app->scene->battlefield.y - playerRect.h;
+				}
+
+				else if (playerCol->Intersects(app->scene->rightWallNearRect))
+				{
+					playerPos.x = SCREEN_WIDTH - app->scene->rightWall.w - 32;
+				}
+			}
+
+			if (playerCol->Intersects(app->scene->leftWall))
+			{
+				if (!playerCol->Intersects(app->scene->leftWallNearRect))
+				{
+					colForce.x += 0.2f * (app->scene->leftWall.w + playerRect.x + playerRect.w);
+					if (playerImpulse.x > 0) playerImpulse.x = 0;
+
+					playerPos.x = app->scene->leftWall.w + playerRect.w;
+				}
+
+				else if (playerCol->Intersects(app->scene->leftWallNearRect))
+				{
+					playerPos.x = app->scene->leftWall.x + app->scene->leftWall.w;
+				}
 			}
 		}
-
-		if (playerCol->Intersects(app->scene->leftWall))
+		case (ELASTIC): //ELASTIC COLLISIONS------------------------------------------------------------------------------------------------------------------
 		{
-			if (!playerCol->Intersects(app->scene->leftWallNearRect))
+			//Ground Collisions
+			if (playerCol->Intersects(app->scene->battlefieldUp))
 			{
-				colForce.x += 0.2f * (app->scene->leftWall.w + playerRect.x + playerRect.w);
-				if (playerImpulse.x > 0) playerImpulse.x = 0;
-
-				playerPos.x = app->scene->leftWall.w + playerRect.w;
+				colForce.y = -gravity;
+				if (playerImpulse.y > 0)
+				{
+					colForce.y -= playerImpulse.y;
+					playerImpulse.y = 0;
+				}
 			}
 
-			else if (playerCol->Intersects(app->scene->leftWallNearRect))
+			if (playerCol->Intersects(app->scene->battlefield))
 			{
-				playerPos.x = app->scene->leftWall.x + app->scene->leftWall.w;
+				if (playerCol->Intersects(app->scene->battlefieldUp))
+				{
+
+				}
+				
+				if (playerCol->Intersects(app->scene->battlefieldRight))
+				{
+				
+				}
+				else if (playerCol->Intersects(app->scene->battlefieldLeft))
+				{
+					if (playerImpulse.x > 0) playerImpulse.x = -playerImpulse.x;
+
+					if (playerPos.x > app->scene->battlefield.x) playerPos.x -= playerPos.x - app->scene->battlefield.x;
+					
+				}
+
 			}
+
+			//WALL COLLISIONS------------------------------------------------------------------------------------------
+		
+			if (playerCol->Intersects(app->scene->rightWall))
+			{
+				if (playerCol->Intersects(app->scene->rightWallNearRect))
+				{
+					if (playerImpulse.x > 0) playerImpulse.x = -playerImpulse.x;
+
+					if (playerPos.x > (SCREEN_WIDTH - 50)) playerPos.x -= app->scene->rightWall.w;
+				}
+			}
+
+			if (playerCol->Intersects(app->scene->leftWall))
+			{
+				if (playerCol->Intersects(app->scene->leftWallNearRect))
+				{
+					if (playerImpulse.x < 0) playerImpulse.x = -playerImpulse.x;
+					
+					if (playerPos.x < app->scene->leftWall.w) playerPos.x += app->scene->leftWall.w;
+				}
+			}
+		}
 		}
 	}
+
+	if (c2->type == Collider::Type::PLAYER)
+	{
+		if (playerCol->Intersects(app->enemigo->enemyRect))
+		{
+			//if (playerPos.x < playerPos) 
+			colForce.x = app->enemigo->enemyImpulse.x;
+			if (playerImpulse.x == 0) playerPos.x += 0.1f * (playerPos.x - app->enemigo->enemyPos.x);
+		}
+
+		
+		/*
+		if (playerCol->Intersects(app->enemigo->enemyRect))
+		{
+			if (!playerCol->Intersects(app->enemigo->enemyRect))
+			{
+				colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y -playerRect.h) * gravity;
+
+				if (playerImpulse.y > 0) playerImpulse.y = 0;
+
+				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
+			}
+
+			else if (playerCol->Intersects(app->enemigo->enemyRect))
+			{
+				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
+			}
+		}
+		*/
+
+	}
+
+		
 
 }
 
@@ -317,6 +426,9 @@ void Player::Restart()
 	playerAcc = { 0, 0 };
 
 	playerRect = { (int)playerPos.x, (int)playerPos.y, 32, 32 };
+
+	playerMode = NORMAL;
+
 }
 
 // Called before quitting

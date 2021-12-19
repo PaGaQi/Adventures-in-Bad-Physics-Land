@@ -8,7 +8,7 @@ struct SDL_Texture;
 
 enum type
 	{
-		STICKY, 
+		CUM, 
 		BOUNCY,	
 		NOTHING
 	};

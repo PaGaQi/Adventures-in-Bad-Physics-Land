@@ -44,7 +44,7 @@ bool Scene::Start()
 	
 	battlefield = { (int)battlefieldPos.x , (int)battlefieldPos.y, battlefieldWidth, battlefieldHeight };
 	battlefieldUp = { (int)battlefieldPos.x , (int)battlefieldPos.y - 3, battlefieldWidth, 3 };
-	battlefieldRight = { (int)battlefieldPos.x + battlefieldWidth, (int)battlefieldPos.y + 16, 32, battlefieldHeight };
+	battlefieldRight = { (int)battlefieldPos.x + battlefieldWidth - 16, (int)battlefieldPos.y + 16, 32, battlefieldHeight };
 	battlefieldLeft = { (int)battlefieldPos.x - 16, (int)battlefieldPos.y + 16, 32, battlefieldHeight };
 
 	wallWidth = 50;

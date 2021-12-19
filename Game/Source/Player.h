@@ -71,6 +71,9 @@ public:
 	bool gameEnd;
 	bool playerLose;
 
+	int playerMode;
+	float playerElast;
+
 private:
 	Collider* playerColUp;
 	Collider* playerColDown;
