@@ -74,6 +74,8 @@ public:
 	int playerMode;
 	float playerElast;
 
+	bool playerGravity;
+
 private:
 	Collider* playerColUp;
 	Collider* playerColDown;

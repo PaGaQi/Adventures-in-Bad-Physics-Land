@@ -62,7 +62,7 @@ bool Scene::Start()
 	rightWall = { (int)rightWallPos.x , (int)rightWallPos.y, wallWidth, wallHeight };
 	rightWallNearRect = { (int)rightWallPos.x - 8, (int)rightWallPos.y, 32, wallHeight };
 
-	seeCols = 1;
+	seeCols = 0;
 
 	battlefieldCol = app->coll->AddCollider(battlefield, Collider::Type::WALL, 0, app->scene);
 	battlefieldUpCol = app->coll->AddCollider(battlefieldUp, Collider::Type::WALL, 0, app->scene);

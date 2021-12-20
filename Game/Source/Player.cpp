@@ -45,6 +45,7 @@ bool Player::Start()
 	playerImpulse = { 0, 0 };
 	mass = 1;
 
+	playerGravity = 1;
 	playerLose = 0;
 	gameEnd = 0;
 
@@ -107,6 +108,11 @@ bool Player::PreUpdate()
 		}
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+	{
+		playerGravity = !playerGravity;
+	}
+
 	//Lower X Friction if not touching the ground
 	if (playerVel.x > 0) playerFriction = 0.5 * playerVel.x;
 	else if (playerVel.x < 0) playerFriction = 0.5 * (playerVel.x);
@@ -122,6 +128,12 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
+	if (playerGravity)
+	{
+		gravity = 0.5f * PLAYER_GRAVITY;
+	}
+	else gravity = 0;
+	
 	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		Restart();
@@ -151,7 +163,7 @@ bool Player::PostUpdate()
 {
 	app->render->DrawRectangle(playerRect, 255, 0, 0, 255);
 
-	app->render->DrawRectangle(playerCol->rect, 0, 255, 0, 100);
+	//app->render->DrawRectangle(playerCol->rect, 0, 255, 0, 100);
 
 	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_REPEAT) app->render->DrawLine(playerPos.x, playerPos.y, playerPos.x, playerPos.y, 0, 255, 0);
 	
@@ -314,6 +326,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 				}
 			}
 		}
+		break;
 		case (ELASTIC): //ELASTIC COLLISIONS------------------------------------------------------------------------------------------------------------------
 		{
 			//Ground Collisions
@@ -370,6 +383,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 				}
 			}
 		}
+		break;
 		}
 	}
 
@@ -382,26 +396,6 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			if (playerImpulse.x == 0) playerPos.x += 0.1f * (playerPos.x - app->enemigo->enemyPos.x);
 			//if (playerImpulse.x != 0 && playerImpulse.x ==)
 		}
-
-		
-		/*
-		if (playerCol->Intersects(app->enemigo->enemyRect))
-		{
-			if (!playerCol->Intersects(app->enemigo->enemyRect))
-			{
-				colForce.y += 0.1f * (app->enemigo->enemyRect.y - playerRect.y -playerRect.h) * gravity;
-
-				if (playerImpulse.y > 0) playerImpulse.y = 0;
-
-				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-			}
-
-			else if (playerCol->Intersects(app->enemigo->enemyRect))
-			{
-				playerPos.y = app->enemigo->enemyRect.y - playerRect.h;
-			}
-		}
-		*/
 
 	}
 
@@ -416,6 +410,8 @@ void Player::Restart()
 	gravity = 0.5f * PLAYER_GRAVITY;
 	playerFriction = 0.0f;
 	mass = 1;
+
+	playerGravity = 1;
 
 	colForce = { 0, 0 };
 	playerImpulse = { 0,0 };
